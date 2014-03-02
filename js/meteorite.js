@@ -52,16 +52,7 @@ function generatePoints()
 	}
 }
 
-window.getAnimationFrame =
-window.requestAnimationFrame ||
-window.webkitRequestAnimationFrame ||
-window.mozRequestAnimationFrame ||
-window.oRequestAnimationFrame ||
-window.msRequestAnimationFrame ||
-function(callback)
-{
-	window.setTimeout(callback, 16.6);
-};
+
 
 //creats animation and graphics
 function loop()
@@ -174,3 +165,14 @@ function drawPoint(point, scale)
 	context.globalAlpha = 1;
 }
 
+
+window.getAnimationFrame =
+window.requestAnimationFrame ||
+window.webkitRequestAnimationFrame ||
+window.mozRequestAnimationFrame ||
+window.oRequestAnimationFrame ||
+window.msRequestAnimationFrame ||
+function(callback)
+{
+	window.setTimeout(callback, 1000/60);
+};
