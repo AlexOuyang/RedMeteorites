@@ -6,14 +6,14 @@ var doublePI = Math.PI * 2;
 var step = 0;
 // a collection of meteorites
 var points = [];
-//controls the time interval of the wires
+//controls the frequency of the lightening
 var focalLength = 600;
 //bgGradient is used to define fillstyle, which sets the color and gradient of the canvas
 var bgGradient;
 
 window.onload = function()
 {
-	canvas = document.getElementById('canvas');
+    canvas = document.getElementById('canvas');
     context = canvas.getContext('2d');
 
     //window.onresize - An event handler for the resize event on the window.
@@ -70,20 +70,30 @@ window.requestAnimFrame = (function(){
 function loop()
 {
 	context.globalAlpha = 0.4;
+	//renders the radial gradient of the background
 	context.fillStyle = bgGradient;
+	//set the background to cover the whole screen window
 	context.fillRect(0, 0, screenWidth, screenHeight);
+	//set the transparency to 100%
 	context.globalAlpha = 1;
 
 	//draw the shooting meteorites animation
 	updatePoints();
 	//render the shooting meteroriets
 	renderPoints();
-	//draw wires of meteorites in the back ground
-	renderWire();
+	//draw lightenings of meteorites in the back ground
+	renderLightening();
 	
 	step += 0.02;
 	//call the requestionAnimFrame to update the animatino frames
 	requestAnimFrame(loop);
+
+	//draw shining text in thee canvas
+	context.font = "30px Arial";
+	if(Math.random() > 0.4) {
+		context.strokeText("The Universe.........is Infinite, so is Alex's power !!",10,50);
+        }
+
 }
 
 //creates and renders the meteorites
@@ -104,12 +114,14 @@ function renderPoints()
 	}
 }
 
-//creates and renders the wires/lines of meterotes in the background
-function renderWire()
-{
-	context.globalAlpha = 0.03;
+//creates and renders the lightening in the background
+function renderLightening()
+{	//set the transpancy of the lightening
+	context.globalAlpha = 0.08;
+	//set the line width of the lightening in the back
 	context.lineWidth = 1;
-	context.strokeStyle = '#FFF';
+	//set the color of the lightening
+	context.strokeStyle = '#b22424';
 	context.beginPath();
 
 	var i = points.length - 1;
@@ -124,8 +136,12 @@ function renderWire()
 		else 
 			context.lineTo(point.x * scale + (screenWidth / 2 ), point.y * scale + (screenHeight / 2));
 	}
+	
+	//render the lightening in certain time interval
+	if(Math.random() > 0.4) {
+		context.stroke();
+        }
 
-	if(Math.random() > 0.4) context.stroke();
 
 	context.closePath();
 	context.globalAlpha = 1;
@@ -175,5 +191,6 @@ function drawPoint(point, scale)
 	context.fill();
 	context.closePath();
 	context.globalAlpha = 1;
+	
 }
 
