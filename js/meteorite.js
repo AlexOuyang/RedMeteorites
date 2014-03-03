@@ -6,7 +6,7 @@ var doublePI = Math.PI * 2;
 var step = 0;
 // a collection of meteorites
 var points = [];
-var focalLength = 500;
+var focalLength = 600;
 //bgGradient is used to define fillstyle, which sets the color and gradient of the canvas
 var bgGradient;
 
@@ -26,8 +26,9 @@ window.onload = function()
 		//createRadialGradient() method creates a radial/circular gradient object in canvas
 		bgGradient=context.createRadialGradient(screenWidth /2, screenHeight / 2, screenWidth, screenWidth / 2, screenHeight / 2, 0);
 		//create a mixture of black and red radial gradient, outer shell is red, innershell is black
-		bgGradient.addColorStop(1, '#000');
-		bgGradient.addColorStop(0.2, '#900');
+		bgGradient.addColorStop(0.8, '#000');
+		bgGradient.addColorStop(0.2, '#4891da');
+		//bgGradient.addColorStop(0.1, '#da4848');
 		//alert(screenWidth + " " +screenHeight);
 	};
 	//generates an array of points
@@ -105,7 +106,7 @@ function renderPoints()
 //creates and renders the wires/lines of meterotes in the background
 function renderWire()
 {
-	context.globalAlpha = 0.02;
+	context.globalAlpha = 0.03;
 	context.lineWidth = 1;
 	context.strokeStyle = '#FFF';
 	context.beginPath();
@@ -174,5 +175,4 @@ function drawPoint(point, scale)
 	context.closePath();
 	context.globalAlpha = 1;
 }
-
 
