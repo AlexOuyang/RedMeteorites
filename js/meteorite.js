@@ -51,10 +51,20 @@ function generatePoints()
 		points.push(point3D);
 	}
 }
+// used for loop() to update the animation frames
+//allows modern browsers to stop drawing graphics when a tab or window is not visible.
+window.requestAnimFrame = (function(){
+	return  window.requestAnimationFrame ||
+			window.webkitRequestAnimationFrame ||
+			window.mozRequestAnimationFrame ||
+			window.oRequestAnimationFrame ||
+			window.msRequestAnimationFrame ||
+			function( callback ){
+				window.setTimeout(callback, 1000 / 60);
+			};
+})();
 
-
-
-//creats animation and graphics
+// set a time loop to update the animation frame every few seconds
 function loop()
 {
 	context.globalAlpha = 0.4;
@@ -68,10 +78,10 @@ function loop()
 	renderPoints();
 	//draw wires of meteorites in the back ground
 	renderWire();
-
+	
 	step += 0.02;
-
-	getAnimationFrame(loop);
+	//call the requestionAnimFrame to update the animatino frames
+	requestAnimFrame(loop);
 }
 
 //creates and renders the meteorites
@@ -166,13 +176,3 @@ function drawPoint(point, scale)
 }
 
 
-window.getAnimationFrame =
-window.requestAnimationFrame ||
-window.webkitRequestAnimationFrame ||
-window.mozRequestAnimationFrame ||
-window.oRequestAnimationFrame ||
-window.msRequestAnimationFrame ||
-function(callback)
-{
-	window.setTimeout(callback, 1000/60);
-};
