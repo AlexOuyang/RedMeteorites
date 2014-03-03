@@ -6,6 +6,7 @@ var doublePI = Math.PI * 2;
 var step = 0;
 // a collection of meteorites
 var points = [];
+//controls the time interval of the wires
 var focalLength = 600;
 //bgGradient is used to define fillstyle, which sets the color and gradient of the canvas
 var bgGradient;
