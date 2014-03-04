@@ -7,7 +7,7 @@ var step = 0;
 // a collection of meteorites
 var points = [];
 //controls the frequency of the lightening
-var focalLength = 600;
+var focalLength = 500;
 //bgGradient is used to define fillstyle, which sets the color and gradient of the canvas
 var bgGradient;
 
@@ -28,9 +28,9 @@ window.onload = function()
 		bgGradient=context.createRadialGradient(screenWidth /2, screenHeight / 2, screenWidth, screenWidth / 2, screenHeight / 2, 0);
 		//create a mixture of black and red radial gradient, outer shell is red, innershell is black
 		bgGradient.addColorStop(0.8, '#000');
-		bgGradient.addColorStop(0.2, '#4891da');
-		//bgGradient.addColorStop(0.1, '#da4848');
-		//alert(screenWidth + " " +screenHeight);
+		//bgGradient.addColorStop(0.2, '#ae7aea');
+		bgGradient.addColorStop(0.7, '#d6bcf4');
+		//bgGradient.addColorStop(1, '#ae7aea');
 	};
 	//generates an array of points
 	generatePoints();
@@ -83,16 +83,17 @@ function loop()
 	renderPoints();
 	//draw lightenings of meteorites in the back ground
 	renderLightening();
-	
+
 	step += 0.02;
 	//call the requestionAnimFrame to update the animatino frames
 	requestAnimFrame(loop);
 
-	//draw shining text in thee canvas
+	//draw flashing text in the canvas
 	context.font = "30px Arial";
 	if(Math.random() > 0.4) {
-		context.strokeText("The Universe.........is Infinite, so is Alex's power !!",10,50);
-        }
+		//context.fillText("The Universe.........is Infinite, so is Alex's power !!",10,50);
+		//context.fill();
+		}
 
 }
 
@@ -117,11 +118,12 @@ function renderPoints()
 //creates and renders the lightening in the background
 function renderLightening()
 {	//set the transpancy of the lightening
-	context.globalAlpha = 0.08;
+	context.globalAlpha = 0.07;
 	//set the line width of the lightening in the back
-	context.lineWidth = 1;
+	context.lineWidth = 0.3;
 	//set the color of the lightening
-	context.strokeStyle = '#b22424';
+	//context.strokeStyle = '#FFF';
+	context.strokeStyle = '#91ebbb';
 	context.beginPath();
 
 	var i = points.length - 1;
@@ -136,7 +138,7 @@ function renderLightening()
 		else 
 			context.lineTo(point.x * scale + (screenWidth / 2 ), point.y * scale + (screenHeight / 2));
 	}
-	
+
 	//render the lightening in certain time interval
 	if(Math.random() > 0.4) {
 		context.stroke();
@@ -185,14 +187,20 @@ function checkBounds(point)
 function drawPoint(point, scale)
 {
 	context.globalAlpha = scale;
-	context.fillStyle = '#FAA';
+	//changing the color of the meteorites based on the distance it travels
+	if(point.x>screenWidth/4 && point.x<screenWidth*3/4&& point.y>screenHeight/6 && point.y<screenHeight*5/6){
+	//render meteorites as white - #FFF
+	context.fillStyle = '#91ebbb';
+	}else{
+	//render meteorites as black
+	context.fillStyle = '#000000';
+	}
 	context.beginPath();
 	//draw square instead of arc, less CPU used also updates faster
-	context.rect(point.x, point.y, scale*1.5, scale*1.5);
+	context.rect(point.x, point.y, scale*1.7, scale*1.7);
 	//context.arc(point.x,point.y,scale,0,2*Math.PI);
 	context.fill();
 	context.closePath();
 	context.globalAlpha = 1;
-	
-}
 
+}
