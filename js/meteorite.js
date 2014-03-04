@@ -187,7 +187,9 @@ function drawPoint(point, scale)
 	context.globalAlpha = scale;
 	context.fillStyle = '#FAA';
 	context.beginPath();
-	context.rect(point.x, point.y, (1.6 * scale > 0) ? 1.6 * scale : 1, (1.6 * scale > 0) ? 1.6 * scale : 1);
+	//draw square instead of arc, less CPU used also updates faster
+	context.rect(point.x, point.y, scale*1.5, scale*1.5);
+	//context.arc(point.x,point.y,scale,0,2*Math.PI);
 	context.fill();
 	context.closePath();
 	context.globalAlpha = 1;
