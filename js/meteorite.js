@@ -10,6 +10,10 @@ var points = [];
 var focalLength = 500;
 //bgGradient is used to define fillstyle, which sets the color and gradient of the canvas
 var bgGradient;
+//use to check if the meteorites is out of the universe
+//var TrajectoryRadius;
+//universeRadiusDefined changes as the screen recises
+//var universeRadiusDefined;
 
 window.onload = function()
 {
@@ -19,8 +23,11 @@ window.onload = function()
     //window.onresize - An event handler for the resize event on the window.
     window.onresize = function()
 	{	
+    //set the height and width of the canvas the same as the screen size
 		screenWidth = window.innerWidth;
 		screenHeight = window.innerHeight;
+      
+    //universeRadiusDefined = screenWidth/4;
 		// define the height, width of the canvas
 		canvas.width = screenWidth;
 		canvas.height = screenHeight;
@@ -30,29 +37,16 @@ window.onload = function()
 		bgGradient.addColorStop(0.8, '#000');
 		//bgGradient.addColorStop(0.2, '#ae7aea');
 		bgGradient.addColorStop(0.7, '#d6bcf4');
-		//bgGradient.addColorStop(1, '#ae7aea');
+		//bgGradient.addColorStop(0.75, '#ae7aea');
 	};
+  //set up the background
+	window.onresize();
 	//generates an array of points
 	generatePoints();
-	//set up the background
-	window.onresize();
 	//creates animation and graphics
     loop();
 };
 
-// generates an array of points as meteorites
-function generatePoints()
-{
-	var i = 1000;
-
-	for(i; i > -1; --i)
-	{	
-		//generate random points and store them in points[]
-		var point3D = {x:(1 - Math.random() * 2) * 600, y:(1 - Math.random() * 2) * 600, z:(1 - Math.random() * 2) * 600, vx:0, vy:0, vz:0};
-
-		points.push(point3D);
-	}
-}
 // used for loop() to update the animation frames
 //allows modern browsers to stop drawing graphics when a tab or window is not visible.
 window.requestAnimFrame = (function(){
@@ -65,18 +59,28 @@ window.requestAnimFrame = (function(){
 				window.setTimeout(callback, 1000 / 60);
 			};
 })();
+// generates an array of points as meteorites
+function generatePoints()
+{
+	for(var i = 1000; i > -1; i--)
+	{	
+		//generate random points and store them in points[]
+		var point3D = {x:(1 - Math.random() * 2) * 600, y:(1 - Math.random() * 2) * 600, z:(1 - Math.random() * 2) * 600, vx:0, vy:0, vz:0};
 
+		points.push(point3D);
+	}
+}
 // set a time loop to update the animation frame every few seconds
 function loop()
 {
+  //set transpancy to 40%
 	context.globalAlpha = 0.4;
 	//renders the radial gradient of the background
 	context.fillStyle = bgGradient;
-	//set the background to cover the whole screen window
+	//set the fillStyle to cover the whole screen window
 	context.fillRect(0, 0, screenWidth, screenHeight);
-	//set the transparency to 100%
+	//when updating the meteorites set the transparency back to 100%
 	context.globalAlpha = 1;
-
 	//draw the shooting meteorites animation
 	updatePoints();
 	//render the shooting meteroriets
@@ -89,12 +93,12 @@ function loop()
 	requestAnimFrame(loop);
 
 	//draw flashing text in the canvas
-	context.font = "30px Arial";
-	if(Math.random() > 0.4) {
-		//context.fillText("The Universe.........is Infinite, so is Alex's power !!",10,50);
+	/*context.font = "20px Arial";
+	//if(Math.random() > 0.4) {
+		context.fillText("The Universe.........is Infinite, so is Alex's power !!",5,30);
 		//context.fill();
 		}
-
+    */
 }
 
 //creates and renders the meteorites
@@ -107,7 +111,7 @@ function renderPoints()
 		var point = points[i];
 		var scale = focalLength / (point.z + focalLength);
 
-		var px = (point.x * scale + (screenWidth / 2));
+		var px = point.x * scale + (screenWidth / 2);
 		var py = point.y * scale + (screenHeight / 2);
 
 		//load the body of meteorites
@@ -126,9 +130,7 @@ function renderLightening()
 	context.strokeStyle = '#91ebbb';
 	context.beginPath();
 
-	var i = points.length - 1;
-
-	for(i; i > -1; --i)
+	for(var i = points.length-1; i > -1; i--)
 	{
 		var point = points[i];
 		var scale = focalLength / (point.z + focalLength);
@@ -149,38 +151,35 @@ function renderLightening()
 	context.globalAlpha = 1;
 }
 
-// creates the animation and motion of shooting meteorites
+// creates the trajectory of the animation of the points
 function updatePoints()
 {
-	var i = points.length - 1;
-
-	for(i; i > -1; --i)
+  //looping through the pints[] to change the trajectory of each meteorite
+	for(var i = points.length-1; i > -1; --i)
 	{
-		var point = points[i];
-		point.x += Math.cos(step * 0.4) * 2;
-		point.y += Math.sin(step * 0.8) * 2;
-		point.z -= 2;
+		points[i].x += Math.cos(step * 0.4) * 2;
+		points[i].y += Math.sin(step * 0.8) * 2;
+		points[i].z -= 3;
 
-		//check to make sure if the meterorites are within in the screen view.
-		checkBounds(point);
+		//check to prevent the back flow of the stars
+		//preventBackFlow(points[i]);
+    //if use launchControl instead of preventBaackFlow, the shooting stars's launching interview can be regulated
+    launchControl(points[i]);
 	}
 }
 
-// contain the meteorites within the screen view.
-function checkBounds(point)
+// prevent the trajectory of the stars from going into the screen (because the tracjectory is controlled by sin and cos)
+function preventBackFlow(point)
 {
-	if(point.x < -2000)
-		point.x = Math.random() * 2000;
-	else if
-		(point.x > 2000) point.x = Math.random() * -2000;
-
-	if(point.y < -2000) 
-		point.y = Math.random() * 2000;
-	else if
-		(point.y > 2000) point.y = Math.random() * -2000;
-
 	if(point.z < -500) 
 		point.z = Math.random() * 2400 + 200;
+}
+//if use launchControl instead of preventBaackFlow, the shooting stars's launching interview can be regulated
+function launchControl(point)
+{
+  if(point.z<-500){
+    point.z = 2500;
+  }
 }
 
 //creates and renders the body of meteorites
@@ -189,7 +188,9 @@ function drawPoint(point, scale)
 	context.globalAlpha = scale;
 	//changing the color of the meteorites based on the distance it travels
 	if(point.x>screenWidth/4 && point.x<screenWidth*3/4&& point.y>screenHeight/6 && point.y<screenHeight*5/6){
-	//render meteorites as white - #FFF
+  //TrajectoryRadius = Math.sqrt((screenWidth/2-point.x)^2+(screenHeight/2-point.y)^2);
+  //if (TrajectoryRadius > universeRadiusDefined){
+	//render meteorites as green - #FFF
 	context.fillStyle = '#91ebbb';
 	}else{
 	//render meteorites as black
