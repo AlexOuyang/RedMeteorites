@@ -1,4 +1,4 @@
-RedMeteorites
+The Universe Canvas Animation
 =============
 
-canvas animation - meteorites shooting through the sky
+canvas animation of the universe and shooting starts. 
