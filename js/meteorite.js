@@ -65,7 +65,7 @@ function generatePoints()
 	for(var i = 1000; i > -1; i--)
 	{	
 		//generate random points and store them in points[]
-		var point3D = {x:(1 - Math.random() * 2) * 600, y:(1 - Math.random() * 2) * 600, z:(1 - Math.random() * 2) * 600, vx:0, vy:0, vz:0};
+		var point3D = {x:(1 - Math.random() * 2) * 600, y:(1-Math.random() * 2) * 600, z:(1 - Math.random() * 2) * 600, vx:0, vy:0, vz:0};
 
 		points.push(point3D);
 	}
@@ -128,16 +128,17 @@ function renderLightening()
 	//set the color of the lightening
 	//context.strokeStyle = '#FFF';
 	context.strokeStyle = '#91ebbb';
+  //begin the lightening path
 	context.beginPath();
-
 	for(var i = points.length-1; i > -1; i--)
 	{
 		var point = points[i];
+    //change the scale of the lightening as it moves closer or further away
 		var scale = focalLength / (point.z + focalLength);
 
 		if(i === points.length - 1) 
+      //move from one meteorites to another, then draw the lighteningi between them
 			context.moveTo(point.x * scale + (screenWidth / 2), point.y * scale + (screenHeight / 2));
-		else 
 			context.lineTo(point.x * scale + (screenWidth / 2 ), point.y * scale + (screenHeight / 2));
 	}
 
@@ -145,8 +146,6 @@ function renderLightening()
 	if(Math.random() > 0.4) {
 		context.stroke();
         }
-
-
 	context.closePath();
 	context.globalAlpha = 1;
 }
@@ -171,12 +170,13 @@ function updatePoints()
 // prevent the trajectory of the stars from going into the screen (because the tracjectory is controlled by sin and cos)
 function preventBackFlow(point)
 {
+  //move the lightening back if it moves too close to the screen
 	if(point.z < -500) 
 		point.z = Math.random() * 2400 + 200;
 }
 //if use launchControl instead of preventBaackFlow, the shooting stars's launching interview can be regulated
 function launchControl(point)
-{
+{  // move the lightening at a z-depth of 2500 if it moves too close to the screen
   if(point.z<-500){
     point.z = 2500;
   }
